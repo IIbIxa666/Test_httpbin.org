@@ -1,9 +1,9 @@
 # TEST API
-Тесты провереяющие API
+API test cases
 
 
 # Env configuration
-default prefix for envs: API
+default prefix for envs: test
 
 | Name                             | Value                              | Description                                                                                |
 |----------------------------------|------------------------------------|--------------------------------------------------------------------------------------------|
