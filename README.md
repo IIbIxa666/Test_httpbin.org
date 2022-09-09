@@ -7,6 +7,6 @@ default prefix for envs: test
 
 | Name                             | Value                              | Description                                                                                |
 |----------------------------------|------------------------------------|--------------------------------------------------------------------------------------------|
-| `test_name`            | superadmin |                                                         |
-| `test_password`           | P3CBceIR6UMnl497nUQW5RK1                        |  |
-| `test_url`  | https://api-dev.plutoview.com|  |
+| `TEST_USERNAME`            | superadmin |username for authorization|
+| `TEST_PASSWORD`           | P3CBceIR6UMnl497nUQW5RK1|password for authorization|
+| `TEST_URL`  | https://api-dev.plutoview.com | url resource being checked|
