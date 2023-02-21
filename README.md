@@ -1,5 +1,5 @@
 # TEST API
-API test cases
+auto site tests httpbin.org using the pytest requests libraries
 
 
 # Env configuration
