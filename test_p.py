@@ -1,73 +1,57 @@
-import pytest
 import requests
+from utils import is_valid_uuid
 
-API_URL = "https://api-dev.plutoview.com"
+API_URL = "http://httpbin.org"
 
 
-def test_get_company_planets_cost_1c(aut):
-    response = requests.get(url=f"{API_URL}/company/planets_cost",
-                            headers={"Authorization": f"Bearer {aut}"})
-    print(aut)
-    print(response.json().get("plan"))
+def test_bearer():
+    response = requests.get(url=f"{API_URL}/bearer",
+                            headers={"Authorization": "Bearer token"})
     assert response.status_code == 200
+    response_body = response.json()
+    assert response_body.get("authenticated") == True
 
 
-def test_get_company_sessions_2c(aut):
-    response = requests.get(url=f"{API_URL}/company/sessions",
-                            headers={"Authorization": f"Bearer {aut}"})
+def test_get():
+    response = requests.get(url=f"{API_URL}/get")
     assert response.status_code == 200
+    response_body = response.json()
+    assert response_body["headers"]["Host"] == "httpbin.org"
 
 
-def test_get_planets_1(aut):
-    response = requests.get(url=f"{API_URL}/planet",
-                            headers={"Authorization": f"Bearer {aut}"})
+def test_get_ip():
+    response = requests.get(url=f"{API_URL}/ip")
     assert response.status_code == 200
+    response_body = response.json()
+    assert len(response_body.get("origin")) == 13
 
 
-def test_get_planet_planet_uuid_2(aut, uuid):
-    response = requests.get(url=f"{API_URL}/planet/{uuid}",
-                            headers={"Authorization": f"Bearer {aut}"})
-    print(uuid)
+def test_get_user_agent():
+    response = requests.get(url=f"{API_URL}/user-agent")
     assert response.status_code == 200
+    response_body = response.json()
+    assert response_body["user-agent"] == "python-requests/2.28.2"
 
-def test_PATCH_planet_planet_uuid_start_3(aut, uuid):
-    response = requests.post(url=f"{API_URL}/planet/{uuid}/start",
-                             headers={"Authorization": f"Bearer {aut}"})
-    print(response.json().get("status"))
-    assert response.json().get("status") == "running"
+
+def test_get_json():
+    response = requests.get(url=f"{API_URL}/json")
     assert response.status_code == 200
+    response_body = response.json()
+    assert response_body["slideshow"]["author"] == "Yours Truly"
 
-def test_PATCH_planet_planet_uuid_Update_4(aut, uuid):
-    response = requests.patch(url=f"{API_URL}/planet/{uuid}",
-                              headers={"Authorization": f"Bearer {aut}"},
-                              json={"name": "TestingDEL123"})
-    print(response.json().get("name"))
-    assert (response.json().get("name") == "TestingDEL123")
+
+def test_get_uuid():
+    response = requests.get(url=f"{API_URL}/uuid")
     assert response.status_code == 200
+    response_body = response.json()
+    assert len(response_body.get("uuid")) == 36
+    assert is_valid_uuid(response_body.get("uuid"))
 
-def test_PATCH_planet_planet_uuid_conect_5(aut, uuid):
-    response = requests.get(url=f"{API_URL}/planet/{uuid}/connect",
-                            headers={"Authorization": f"Bearer {aut}"})
+
+def test_get_methods():
+    response = requests.get('https://httpbin.org/status/200')
     assert response.status_code == 200
-
-def test_PATCH_planet_planet_uuid_getOne_6(aut, uuid):
-    response = requests.get(url=f"{API_URL}/planet/{uuid}",
-                            headers={"Authorization": f"Bearer {aut}"})
-    print(response.json().get("status"))
-    assert(response.json().get("status") == "running")
-    assert response.status_code == 200
-
-def test_PATCH_planet_planet_uuid_stop_7(aut, uuid):
-    response = requests.post(url=f"{API_URL}/planet/{uuid}/stop",
-                             headers={"Authorization": f"Bearer {aut}"})
-    print(response.json().get("status"))
-    assert (response.json().get("status") == "stopped")
-    assert response.status_code == 200
-
-def test_PATCH_planet_planet_uuid_del_8(aut, uuid):
-    response = requests.delete(url=f"{API_URL}/planet/{uuid}",
-                               headers={"Authorization": f"Bearer {aut}"})
-    print(response.json().get("message"))
-    assert (response.json().get("message") == f"delete planet with uuid {uuid}")
-    assert response.status_code == 200
-
+    response = requests.get('https://httpbin.org/status/400')
+    assert response.status_code == 400
+    response = requests.get('https://httpbin.org/status/500')
+    assert response.status_code == 500
